@@ -3,7 +3,7 @@ function [xy, xaya] = pickmatchingpoints(im1, im2, n, figno)
 if nargin<3
     error('not enough parameters');
 elseif nargin<4
-    figno = gcf;
+    figno = gcf; % fig = gcf returns the current figure handle
 end
 figure(figno);
 clf;
