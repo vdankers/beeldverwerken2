@@ -47,3 +47,8 @@ uv = frames2(:,matches(2,:));
 [model, inliers] = ransac(xy(1:2,:),uv(1:2,:));
 
 plot_matches(f1, f2, xy(:,inliers), uv(:,inliers));
+
+%% 
+
+mosaic('nachtwacht1.jpg','nachtwacht2.jpg');
+
