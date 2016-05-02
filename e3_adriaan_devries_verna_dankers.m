@@ -15,14 +15,25 @@ f2 = rgb2gray(imread('nachtwacht2.jpg'));
 [frames2, descriptors2] = vl_sift(single(f2));
 [matches, scores] = vl_ubcmatch(descriptors1, descriptors2);
 
-plot_matches(f1, f2, frames1, frames2, matches)
+plot_matches(f1, f2, frames1(:,matches(1,:)), frames2(:,matches(2,:)))
 
-%%
+%% Use projection matrix to calculate matching keypoints
 
+% Select a few matches to base the projection matrix on
 xy = frames1(:,matches(1,:));
-xy = xy(1:2,1:4)
+smallxy = xy(1:2,35:40)
 
 uv = frames2(:,matches(2,:));
-uv = uv(1:2,1:4)
+smalluv = uv(1:2,35:40)
 
-projectionMatrix = createProjectionMatrix(xy',uv')
+% Create projection matrix and calculate matching keypoints
+projectionMatrix = createProjectionMatrix(smalluv',smallxy')
+newuv = [uv(1:2,:); repmat([1],[1,size(uv,2)])]
+projectedFrames = newuv' * projectionMatrix;
+
+% Divide every point by its lambda
+for i = 1:size(projectedFrames,1)
+  projectedFrames(i,:) = projectedFrames(i,:) / projectedFrames(i,3);
+end
+
+plot_matches(f1, f2, projectedFrames(:,:)', newuv)
