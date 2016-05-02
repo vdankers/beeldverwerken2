@@ -37,3 +37,13 @@ for i = 1:size(projectedFrames,1)
 end
 
 plot_matches(f1, f2, projectedFrames(:,:)', newuv)
+
+%% Use RANSAC to remove bad matches
+
+xy = frames1(:,matches(1,:));
+uv = frames2(:,matches(2,:));    
+
+% Apply ransac to reduce matching points
+[model, inliers] = ransac(xy(1:2,:),uv(1:2,:));
+
+plot_matches(f1, f2, xy(:,inliers), uv(:,inliers));
