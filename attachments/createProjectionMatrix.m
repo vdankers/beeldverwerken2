@@ -1,16 +1,14 @@
 %% createProjectionMatrix: create a matrix for a projection based on old
 % and new positions of key points from the picture
 function  projMatrix = createProjectionMatrix(xy, uv)
-  % calculation  of  projection  matrix
+  
+% calculation  of  projection  matrix
   [npoints, xydim] = size(xy);
   uvdim = size(uv, 2);
 
   xy1 = [xy ones(npoints, 1)];
+  
   % Create a identity matrix like pattern of xy1, for example if uvdim == 2:
-  % A = [
-  %   xy1   zeros
-  %   zeros xy1
-  % ];
   Aleft = zeros(uvdim * [npoints xydim + 1]);
   for ii = 1:uvdim
     % 1 based, so -1's at indexes
@@ -20,12 +18,7 @@ function  projMatrix = createProjectionMatrix(xy, uv)
     ) = xy1;
   end
 
-  % Do the strange multiplication needed because of lambda, it previously
-  % would have looked like this:
-  % Aright = [
-  %  u .* x   u .* y  u
-  %  v .* x   v .* y  v
-  % ]
+  % Do the multiplication needed because of lambda
   Aright = -repmat(uv(:), 1, xydim + 1) .* repmat(xy1, uvdim, 1);
 
   [U S V] = svd([Aleft Aright]);

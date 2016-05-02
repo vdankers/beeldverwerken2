@@ -6,7 +6,7 @@ f2 = imread('nachtwacht2.jpg');
 
 [xy, xaya] = pickmatchingpoints(f1, f2, 7, 1)
 
-T = makeTransformMatrix('projective',xy', xaya');
+T = createProjectionMatrix(xy', xaya')
 T = maketform('projective',T);
 [x y] = tformfwd(T,[1 size(f1,2)], [1 size(f1,1)]);
 
