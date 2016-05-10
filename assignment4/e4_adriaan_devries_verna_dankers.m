@@ -7,7 +7,7 @@ plot_hough_transforms
 
 %%
 
-% lines = houghlines(im, h, 1);
+  lines = houghlines(im, h, 1);
 % imshow(im)
 % hold on
 % for n = 1:size(lines,1)
