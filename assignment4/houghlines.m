@@ -10,7 +10,6 @@ function lines = houghlines(im, h, thresh)
 
     % thresholding the hough transform with thresh
     BW = im2bw(h, thresh);
-    threshedH = h.*BW;
     
     [bwl, nregions] = bwlabel(BW);
     lines = zeros(nregions, 4);
