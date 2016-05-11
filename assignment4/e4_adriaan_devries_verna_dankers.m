@@ -8,6 +8,12 @@ images = char('shapes.png', 'szeliski.png', 'billboard.png', 'box.png');
 
 %plot_pictures(images)
 
+%plot_transforms(images)
+
+%plot_lines(images)
+
+plot_tls_lines(images)
+
 %%
 
 % Sample code for performing hough tranformation:
@@ -19,7 +25,7 @@ images = char('shapes.png', 'szeliski.png', 'billboard.png', 'box.png');
 % h = hough(im,[0.5 0.8],500,500);
 % h = h / (max(max(h))/4);
 
-%plot_transforms(images)
+
 
 %%
 
