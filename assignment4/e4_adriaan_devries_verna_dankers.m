@@ -82,5 +82,5 @@ end
 % points needed for the affine transformation, some selection still has to
 % be made so that the intersections of the opposing sides of the
 % quadrilateral don't get used.
-intersections = intersections(straight_lines);
-disp(intersections)
+inters = intersections(straight_lines);
+disp(inters)
