@@ -12,7 +12,7 @@ function lines = houghlines(im, h, thresh)
     BW = im2bw(h, thresh);
     
     [bwl, nregions] = bwlabel(BW);
-    lines = zeros(nregions, 3);
+    lines = zeros(nregions, 4);
     for n = 1:nregions
         % masking and getting the maximum value and its index of each
         % region
@@ -26,10 +26,11 @@ function lines = houghlines(im, h, thresh)
         
         % getting the lines
         [x1, y1, x2, y2] = thetarho2endpoints(theta, rho, size(im, 1), size(im, 2));
+        lines(n, :) = [x1, x2, y1, y2];
         
         % homogeneous coordinate time
-        lines(n, :) = cross([x1, y1, 1],[x2, y2, 2]);
-        lines(n, :) = lines(n, :) / sqrt(lines(n, 1)^2 + lines(n,2)^2)
+        %lines(n, :) = cross([x1, y1, 1],[x2, y2, 2]);
+        %lines(n, :) = lines(n, :) / sqrt(lines(n, 1)^2 + lines(n,2)^2)
         
     end
 
