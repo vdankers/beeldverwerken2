@@ -9,7 +9,7 @@ function l = line_through_points(points)
     points2(i,:) = points(i,:) - centroid;
   end
   
-  % Create covarianc matrix
+  % Create covariance matrix
   matrix = cov(points2(:,1),points2(:,2)); % REPLACE WITH OWN CODE FOR COV MATRIX
   
   % Find eigenvector of largest eigenvalue
@@ -27,9 +27,8 @@ function l = line_through_points(points)
   orth_vec = centroid' - projc;
   d = sqrt(orth_vec(1)^2 + orth_vec(2)^2);
   
-  if centroid(2) < 0
+  if n(1)*n(2) < 0
     d = -d;
-    a = 'paard'
   end
   
   l = [n, -d];
