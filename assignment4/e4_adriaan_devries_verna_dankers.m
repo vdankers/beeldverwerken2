@@ -23,17 +23,23 @@ plot_transforms(images)
 
 %%
 
-lines = houghlines(im, h, 1);
-% imshow(im)
-% hold on
-% for n = 1:size(lines,1)
-%     line(lines(n, 1:2), lines(n, 3:4))
-% end
-% hold off
+% 5 lines added for testing
+img = imread(strcat(images(1,:)));
+im = im2double(rgb2gray(img));
+h = hough(im,[0.5 0.8],500,500);
+h = h / (max(max(h))/4);
+% lines = houghlines(im, h, 1);
+lines = houghlines_dilation(im, h, 1, 10);
 
-lines = lines_to_hom(lines);
+imshow(im)
+hold on
+for n = 1:size(lines,1)
+    line(lines(n, 1:2), lines(n, 3:4))
+end
+hold off
 
-points = [[1 1 1]; [110 104 1]; [110 105 1]];
-lines(1,:)
-points = points_of_line(points, lines(1,:), 10)
-line_through_points(points(:,1:2))
+%%
+lines_to_hom([
+  [1  0   0  1];
+  [1 -1  -1  1]
+  ])
