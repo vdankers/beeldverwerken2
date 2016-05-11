@@ -60,6 +60,7 @@ end
 lines = lines_to_hom(lines);
 imshow(im)
 hold on;
+straight_lines = zeros(size(lines));
 for i = 1:size(lines,1)
   points = points_of_line(homopoints', lines(i,:), 10);
   l = line_through_points(points(:,1:2));
@@ -69,4 +70,17 @@ for i = 1:size(lines,1)
   x = linspace(0,size(im,2));
   y = (a*x - c)/ -b;
   plot(x,y);
+  straight_lines(i,:) = l;
 end
+
+
+%%
+
+% this gives the intersections of the lines. Depending on the picture we
+% will get significantly more or less than 4 lines, which correlates with
+% the amount of intersections (given they're not parallel). To get the
+% points needed for the affine transformation, some selection still has to
+% be made so that the intersections of the opposing sides of the
+% quadrilateral don't get used.
+intersections = intersections(straight_lines);
+disp(intersections)
