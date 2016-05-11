@@ -13,3 +13,8 @@ plot_hough_transforms
 % for n = 1:size(lines,1)
 %     line(lines(n, 1:2), lines(n, 3:4))
 % end
+
+lines_to_hom([
+  [1  2   1  2];
+  [1 -1  -1  1]
+  ])
