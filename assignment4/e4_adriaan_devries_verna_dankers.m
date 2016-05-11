@@ -6,28 +6,13 @@ addpath('plots');
 %% Plot hough transforms of several images
 images = char('shapes.png', 'szeliski.png', 'billboard.png', 'box.png');
 
-%plot_pictures(images)
+plot_pictures(images)
 
-%plot_transforms(images)
+plot_transforms(images)
 
-%plot_lines(images)
+plot_lines(images)
 
-plot_tls_lines(images)
-
-%%
-
-% Sample code for performing hough tranformation:
-% Read the image and cast it to doubles in gray
-% img = imread(imgname);
-% im = im2double(rgb2gray(img));
-% Perform hough transformation with self determined boundaries for edge
-% detection
-% h = hough(im,[0.5 0.8],500,500);
-% h = h / (max(max(h))/4);
-
-
-
-%%
+%% Find houghlines and show them on top of pictures
 
 % 5 lines added for testing
 img = imread(strcat(images(1,:)));
@@ -44,7 +29,7 @@ for n = 1:size(lines,1)
 end
 hold off
 
-%%
+%% Find optimal lines with total least squares
 
 % pythonesque turning logical edge array into a 3 x n array with the
 % homogeneous representations of the edgepoints
@@ -61,8 +46,7 @@ for i=1:size(edges,1)
    end
 end
 
-
-
+% Find least squares optimal fits
 lines = lines_to_hom(lines);
 imshow(im)
 hold on;
@@ -80,7 +64,7 @@ for i = 1:size(lines,1)
 end
 
 
-%%
+%% Find intersections of lines
 
 % this gives the intersections of the lines. Depending on the picture we
 % will get significantly more or less than 4 lines, which correlates with
@@ -94,3 +78,11 @@ inters = intersections(straight_lines);
 x = -inters(:, 1)./inters(:, 3);
 y = -inters(:, 2)./inters(:, 3);
 plot(x, y, '*')
+
+
+%% Run experiments
+
+experiment1
+
+%%
+experiment2
