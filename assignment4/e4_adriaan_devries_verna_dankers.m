@@ -24,15 +24,16 @@ plot_transforms(images)
 %%
 
 lines = houghlines(im, h, 1);
-imshow(im)
-hold on
-for n = 1:size(lines,1)
-    line(lines(n, 1:2), lines(n, 3:4))
-end
-hold off
+% imshow(im)
+% hold on
+% for n = 1:size(lines,1)
+%     line(lines(n, 1:2), lines(n, 3:4))
+% end
+% hold off
 
-%%
-lines_to_hom([
-  [1  0   0  1];
-  [1 -1  -1  1]
-  ])
+lines = lines_to_hom(lines);
+
+points = [[1 1 1]; [110 104 1]; [110 105 1]];
+lines(1,:)
+points = points_of_line(points, lines(1,:), 10)
+line_through_points(points(:,1:2))
