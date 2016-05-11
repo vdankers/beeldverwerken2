@@ -23,7 +23,14 @@ plot_transforms(images)
 
 %%
 
-lines = houghlines(im, h, 1);
+% 5 lines added for testing
+img = imread(strcat(images(1,:)));
+im = im2double(rgb2gray(img));
+h = hough(im,[0.5 0.8],500,500);
+h = h / (max(max(h))/4);
+% lines = houghlines(im, h, 1);
+lines = houghlines_dilation(im, h, 1, 10);
+
 imshow(im)
 hold on
 for n = 1:size(lines,1)
