@@ -3,8 +3,7 @@ function [pts] = points_of_line(points , line , epsilon)
   % points   - an array containing all points
   % line     - the homogeneous representation of the line
   % epsilon  - the maximum distance
-  points'
-  deltas = line * points'
+  deltas = line * points';
   pts = [];
   
   for i = 1:size(points,1)
