@@ -89,4 +89,8 @@ end
 % be made so that the intersections of the opposing sides of the
 % quadrilateral don't get used.
 inters = intersections(straight_lines);
-disp(inters)
+
+% now we plot them, if they're visible (in the image)
+x = -inters(:, 1)./inters(:, 3);
+y = -inters(:, 2)./inters(:, 3);
+plot(x, y, '*')
