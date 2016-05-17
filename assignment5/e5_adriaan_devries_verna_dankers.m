@@ -35,15 +35,25 @@ end
 
 %% Own PCA method
 
-[P, E] = our_pca(training_set)
+[P, E] = our_pca(training_set')
 
 %% PCA2 for testing
+imagestruct = [matrix.images{:}];
+positions = vertcat(imagestruct.position);
 
-[projected_data, principal_components, V] = our_pca2(training_set, 7)
+[projection_matrix, principal_components, V] = our_pca2(training_set, 50);
+
+% using the pca to reduce dimensions for all vectors
+for i = 1:size(imagestruct,2)
+  imagestruct(i).img = flatten_image(imagestruct(i).img);
+  imagestruct(i).img = projection_matrix * imagestruct(i).img';
+end
 
 %% PCA with SVD
 
-[projected_data, principal_components, V] = pca_with_svd(training_set)
+[projection_matrix, principal_components, V] = pca_with_svd(training_set);
+
+
 
 %% Built in pca of matlab: (voor controle)
 [coeff,s] = pca(training_set');

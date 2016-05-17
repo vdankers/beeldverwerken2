@@ -1,4 +1,4 @@
-function [projected_data, PC, V] = our_pca2(data, d)
+function [projection_matrix, PC, V] = our_pca2(data, d)
   % Subtract mean for every 'measurement type'
   [~, n] = size(data);
   mn =  mean(data,2);
@@ -14,5 +14,5 @@ function [projected_data, PC, V] = our_pca2(data, d)
   PC = PC(:,indices);
   V = V(indices);
   
-  projected_data = PC' * data;
+  projection_matrix = PC' * data;
 end
