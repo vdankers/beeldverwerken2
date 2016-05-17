@@ -13,14 +13,14 @@ fake_cor2 = calc_fake_correlation(matrix.images{45}.img,matrix.images{300}.img)
 equal_fake = 2 - 2*cor2
 
 cor3 = calc_correlation(matrix.images{85}.img,matrix.images{6}.img)
-fake_cor3 = calc_fake_correlation(matrix.images{85}.img,matrix.images{6}.img)
+gitfake_cor3 = calc_fake_correlation(matrix.images{85}.img,matrix.images{6}.img)
 equal_fake = 2 - 2*cor3
 
 %% PCA
 
 % Split training and test set
 n = 16800;
-m = 2;
+m = 300;
 m2 = length(matrix.images)-m;
 training_set = zeros(m,n);
 test_set = zeros(m2,n);
@@ -36,6 +36,14 @@ end
 %% Own PCA method
 
 [P, E] = our_pca(training_set)
+
+%% PCA2 for testing
+
+[projected_data, principal_components, V] = our_pca2(training_set, 7)
+
+%% PCA with SVD
+
+[projected_data, principal_components, V] = pca_with_svd(training_set)
 
 %% Built in pca of matlab: (voor controle)
 [coeff,s] = pca(training_set');
