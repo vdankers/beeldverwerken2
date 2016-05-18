@@ -10,7 +10,7 @@ data = load(fullfile('','omni.mat'));
 
 % edge_to_take_off_width = 0;
 
-data.images = edges_off(data.images, edge_to_take_off_width);
+% data.images = edges_off(data.images, edge_to_take_off_width);
 images = data.images;
 
 
