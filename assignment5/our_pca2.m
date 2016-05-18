@@ -1,19 +1,23 @@
-function [projection_matrix, PC, V] = our_pca2(data, d)
+function [projection_matrix, Vectors, Values] = our_pca2(X, d)
   % Subtract mean for every 'measurement type'
-  [~, n] = size(data);
-  mn =  mean(data,2);
+  [~, n] = size(X);
+  X_mean =  mean(X,2);
   
-  data = data - repmat(mn, 1, n);
+  X = X - repmat(X_mean, 1, n);
   
-  % Calc covariance matrix and its eigenvalues and eigenvectors
-  C = (1 / (n-1)) * (data * data');
-  [PC, V] = eigs(C, d);
-  V = diag(V);
+  % Calc covariance matrix and its first d eigenvalues and eigenvectors
+  C = (1 / (n-1)) * (X * X');
+  [Vectors, Values] = eigs(C, d);
   
+  % we only need a vector, not a matrix
+  Values = diag(Values);
+
   % Vectors and eigenvalues in decreasing order
-  [~, indices] = sort(-1*V);
-  PC = PC(:,indices);
-  V = V(indices);
+  [~, indices] = sort(Values, 'descend');
+  Values = Values(indices);
+  Vectors = Vectors(:,indices);
   
-  projection_matrix = PC' * data;
+  
+  % and finally, we make the projection matrix
+  projection_matrix = Vectors' * X;
 end
