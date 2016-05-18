@@ -61,9 +61,7 @@ end
 
 %% 2. PCA - Plot the first 50 eigenvalues
 
-[projection_matrix, principal_components, V] = our_pca(training_set, 200);
 scatter(2:50,V(2:50))
-
 x = xlabel('nth eigenvalue');
 set(x,'Interpreter','latex');
 
