@@ -71,14 +71,4 @@ disp(accuracy)
 
 %% PCA - Alternative version with SVD
 
-[projection_data, principal_components, V] = pca_with_svd(training_set);
-
-%% PCA - Use built in pca of matlab (to control our own outcome)
-[coeff,principal_components] = pca(training_set');
-% IM = s(:,1)
-% 
-% subplot(2,1,1)
-% imshow(reshape(IM,[112 150]),[]);
-% 
-% subplot(2,1,2)
-% imshow(reshape(training_set(1,:),[112 150]),[]);
+[projection_matrix, principal_components, V] = pca_with_svd(training_set);
