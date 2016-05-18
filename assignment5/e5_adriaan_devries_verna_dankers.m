@@ -60,8 +60,8 @@ end
 
 correct = 0;
 for i = m+1:size(imagestruct, 2)
-  bestmatch = best_match(imagestruct(i), imagestruct(1:m));
-  if close_enough(imagestruct(i), bestmatch)
+  best_match = get_best_match(imagestruct(i), imagestruct(1:m));
+  if close_enough(imagestruct(i), best_match)
     correct = correct + 1;
   end
 end
