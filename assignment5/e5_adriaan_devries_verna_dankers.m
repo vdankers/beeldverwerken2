@@ -38,36 +38,23 @@ end
 reduced_images = [images{:}];
 positions = vertcat(reduced_images.position);
 
-[projection_data, principal_components, V] = our_pca2(training_set, 50);
+[projection_matrix, principal_components, V] = our_pca2(training_set, 50);
 
 
 %% PCA - Plot the first 9 PCA vectors as images
 
 for i = 1:9
   subplot(3,3,i)
-  imshow(reshape(projection_data(i,:),[112 150]),[])
+  imshow(reshape(projection_matrix(i,:),[112 150]),[])
 end
 
 %% PCA - Use the pca to reduce dimensions for all vectors
 
-
-size(projection_data)
-
 for i = 1:size(reduced_images,2)
   reduced_images(i).img = flatten_image(reduced_images(i).img);
-  reduced_images(i).img = projection_data * reduced_images(i).img;
+  reduced_images(i).img = reduced_images(i).img * projection_matrix';
 end
 
 %% PCA - Alternative version with SVD
 
-[projection_data, principal_components, V] = pca_with_svd(training_set);
-
-%% PCA - Use built in pca of matlab (to control our own outcome)
-[coeff,principal_components] = pca(training_set');
-% IM = s(:,1)
-% 
-% subplot(2,1,1)
-% imshow(reshape(IM,[112 150]),[]);
-% 
-% subplot(2,1,2)
-% imshow(reshape(training_set(1,:),[112 150]),[]);
+[projection_matrix, principal_components, V] = pca_with_svd(training_set);
