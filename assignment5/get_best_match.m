@@ -12,7 +12,6 @@ function best_match = get_best_match(imstruct, database)
     if correlation > bestcorrelation
        best_match = database(i);
        bestcorrelation = correlation;
-       best_index = i;
     end
   end
   
