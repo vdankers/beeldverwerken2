@@ -7,7 +7,8 @@ data = load(fullfile('','omni.mat'));
 % if you want to take the edge off the images, specify the width here. It's
 % recommended to comment this out instead of using 0 if you don't want to
 % change the input.
-edge_to_take_off_width = 20;
+
+% edge_to_take_off_width = 0;
 
 data.images = edges_off(data.images, edge_to_take_off_width);
 images = data.images;
