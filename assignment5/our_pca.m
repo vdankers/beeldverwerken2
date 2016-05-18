@@ -1,4 +1,4 @@
-%% our_pca: ...
+%% our_pca: creates a matrix that reduces dimensionality of data with maximum expressiveness
 function [projection_matrix, Vectors, Values] = our_pca(X, d)
   % Subtract mean for every 'measurement type'
   [~, n] = size(X);

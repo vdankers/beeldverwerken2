@@ -1,4 +1,4 @@
-%% flatten_image: flattens an image from matrix to vector
+%% flatten_image: flattens and normalises an image from matrix to vector
 function vector = flatten_image(image)
   len = size(image,1)*size(image,2);
   vector = reshape(image, [1, len]);
