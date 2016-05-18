@@ -3,7 +3,18 @@
 addpath('attachments');
 
 data = load(fullfile('','omni.mat'));
+
+% if you want to take the edge off the images, specify the width here. It's
+% recommended to comment this out instead of using 0 if you don't want to
+% change the input.
+edge_to_take_off_width = 20;
+
+data.images = edges_off(data.images, edge_to_take_off_width);
 images = data.images;
+
+
+% this code was used for determining the relationship between the two ways
+% of calculating correlation
 
 % cor1 = calc_correlation(images{1}.img,images{2}.img)
 % fake_cor1 = calc_fake_correlation(images{1}.img,images{2}.img)
@@ -20,7 +31,7 @@ images = data.images;
 %% PCA - prepare data for PCA
 
 % Split training and test set
-n = 16800;
+n = size(images{1}.img,1) * size(images{1}.img,2);
 m = 300;
 m2 = length(images)-m;
 training_set = zeros(m,n);
@@ -36,14 +47,14 @@ end
 
 %% PCA - Calculate the principal components
 
-[projection_matrix, principal_components, V] = our_pca2(training_set, 200);
+[projection_matrix, principal_components, V] = our_pca(training_set, 20);
 
 
 %% PCA - Plot the first 9 PCA vectors as images
 
 for i = 1:9
   subplot(3,3,i)
-  imshow(reshape(projection_matrix(i,:),[112 150]),[])
+  imshow(reshape(projection_matrix(i,:),size(images{1}.img)),[])
 end
 
 %% PCA - Use the pca to reduce dimensions for all vectors
@@ -57,7 +68,7 @@ for i = 1:size(imagestruct,2)
 end
 
 %% nearest neighbour
-
+tic
 correct = 0;
 for i = m+1:size(imagestruct, 2)
   best_match = get_best_match(imagestruct(i), imagestruct(1:m));
@@ -68,7 +79,7 @@ end
 
 accuracy = correct / (size(imagestruct, 2)-m);
 disp(accuracy)
-
+toc
 %% PCA - Alternative version with SVD
 
 [projection_matrix, principal_components, V] = pca_with_svd(training_set);
