@@ -30,7 +30,7 @@ positions = vertcat(imagestruct.position);
 % fake_cor3 = calc_fake_correlation(images{85}.img,images{6}.img)
 % equal = 2 - 2*cor3
 
-%% PCA - prepare data for PCA
+%% 2. PCA - prepare data for PCA
 
 % Split training and test set
 n = size(images{1}.img,1) * size(images{1}.img,2);
@@ -47,19 +47,19 @@ for i = 1:m2
   test_set(i,:) = flatten_image(images{i}.img);
 end
 
-%% PCA - Calculate the principal components
+%% 2. PCA - Calculate the principal components
 
 [projection_matrix, principal_components, V] = our_pca(training_set, 200);
 
 
-%% PCA - Plot the first 9 PCA vectors as images
+%% 2. PCA - Plot the first 9 PCA vectors as images
 
 for i = 1:9
   subplot(3,3,i)
   imshow(reshape(projection_matrix(i,:),size(images{1}.img)),[])
 end
 
-%% PCA - Plot the first 50 eigenvalues
+%% 2. PCA - Plot the first 50 eigenvalues
 
 [projection_matrix, principal_components, V] = our_pca(training_set, 200);
 scatter(2:50,V(2:50))
@@ -67,22 +67,46 @@ scatter(2:50,V(2:50))
 x = xlabel('nth eigenvalue');
 set(x,'Interpreter','latex');
 
-%% PCA - Use the pca to reduce dimensions for all vectors
+%% 2. PCA - Use the pca to reduce dimensions for all vectors
 
 imagestruct = reduce_dimensions(imagestruct, projection_matrix);
 
-%% Nearest Neighbour - Calculate accuracy
+%% 2 PCA - Compare the speedup relative to the naive implementation for image differences
 
-[accuracy, time] = test_nearest_neighbours(m, imagestruct);
+naive_times = [1:50];
+reduced_times = [1:50];
 
-%% Nearest Neighbour - Examine dimensions and accuracy
+for i = 1:50
+  % Naive implementation
+  tic
+  for j = 1:length(images)
+    calc_correlation(images{i}.img,images{j}.img); 
+  end
+  naive_times(i) = toc;
 
+  % Check image similarity with reduced data
+  tic
+  for j = 1:length(images)
+    calc_correlation(imagestruct(i).img,imagestruct(j).img);
+  end
+  reduced_times(i) = toc;
+end
+
+disp(mean(naive_times))
+disp(mean(reduced_times))
+
+%% (PCA - Alternative version with SVD)
+[projection_matrix, principal_components, V] = pca_with_svd(training_set);
+
+%% 3. Nearest Neighbour - Calculate accuracy
+
+[accuracy, time] = test_nearest_neighbours(m, imagestruct)
+
+%% 3. Nearest Neighbour - Examine dimensions and accuracy
+
+% reset data for the experiments
 images = data.images;
 imagestruct = [data.images{:}];
 positions = vertcat(imagestruct.position);
 
 experiment1_nn
-
-%% PCA - Alternative version with SVD
-
-[projection_matrix, principal_components, V] = pca_with_svd(training_set);
