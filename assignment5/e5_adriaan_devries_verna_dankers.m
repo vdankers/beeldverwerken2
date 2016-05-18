@@ -5,17 +5,17 @@ addpath('attachments');
 data = load(fullfile('','omni.mat'));
 images = data.images;
 
-cor1 = calc_correlation(images{1}.img,images{2}.img)
-fake_cor1 = calc_fake_correlation(images{1}.img,images{2}.img)
-equal = 2 - 2*cor1
- 
-cor2 = calc_correlation(images{45}.img,images{300}.img)
-fake_cor2 = calc_fake_correlation(images{45}.img,images{300}.img)
-equal = 2 - 2*cor2
-
-cor3 = calc_correlation(images{85}.img,images{6}.img)
-fake_cor3 = calc_fake_correlation(images{85}.img,images{6}.img)
-equal = 2 - 2*cor3
+% cor1 = calc_correlation(images{1}.img,images{2}.img)
+% fake_cor1 = calc_fake_correlation(images{1}.img,images{2}.img)
+% equal = 2 - 2*cor1
+%  
+% cor2 = calc_correlation(images{45}.img,images{300}.img)
+% fake_cor2 = calc_fake_correlation(images{45}.img,images{300}.img)
+% equal = 2 - 2*cor2
+% 
+% cor3 = calc_correlation(images{85}.img,images{6}.img)
+% fake_cor3 = calc_fake_correlation(images{85}.img,images{6}.img)
+% equal = 2 - 2*cor3
 
 %% PCA - prepare data for PCA
 
@@ -36,7 +36,7 @@ end
 
 %% PCA - Calculate the principal components
 
-[projection_matrix, principal_components, V] = our_pca2(training_set, 300);
+[projection_matrix, principal_components, V] = our_pca2(training_set, 200);
 
 
 %% PCA - Plot the first 9 PCA vectors as images
@@ -66,7 +66,8 @@ for i = m+1:size(imagestruct, 2)
   end
 end
 
-accuracy = correct / (size(imagestruct, 2)-m)
+accuracy = correct / (size(imagestruct, 2)-m);
+disp(accuracy)
 
 %% PCA - Alternative version with SVD
 
