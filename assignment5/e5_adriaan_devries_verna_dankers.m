@@ -12,7 +12,8 @@ data = load(fullfile('','omni.mat'));
 
 % data.images = edges_off(data.images, edge_to_take_off_width);
 images = data.images;
-
+imagestruct = [data.images{:}];
+positions = vertcat(imagestruct.position);
 
 % this code was used for determining the relationship between the two ways
 % of calculating correlation
@@ -48,7 +49,7 @@ end
 
 %% PCA - Calculate the principal components
 
-[projection_matrix, principal_components, V] = our_pca(training_set, 20);
+[projection_matrix, principal_components, V] = our_pca(training_set, 200);
 
 
 %% PCA - Plot the first 9 PCA vectors as images
@@ -58,29 +59,30 @@ for i = 1:9
   imshow(reshape(projection_matrix(i,:),size(images{1}.img)),[])
 end
 
+%% PCA - Plot the first 50 eigenvalues
+
+[projection_matrix, principal_components, V] = our_pca(training_set, 200);
+scatter(2:50,V(2:50))
+
+x = xlabel('nth eigenvalue');
+set(x,'Interpreter','latex');
+
 %% PCA - Use the pca to reduce dimensions for all vectors
 
+imagestruct = reduce_dimensions(imagestruct, projection_matrix);
+
+%% Nearest Neighbour - Calculate accuracy
+
+[accuracy, time] = test_nearest_neighbours(m, imagestruct);
+
+%% Nearest Neighbour - Examine dimensions and accuracy
+
+images = data.images;
 imagestruct = [data.images{:}];
 positions = vertcat(imagestruct.position);
 
-for i = 1:size(imagestruct,2)
-  imagestruct(i).img = flatten_image(imagestruct(i).img);
-  imagestruct(i).img = projection_matrix * imagestruct(i).img';
-end
+experiment1_nn
 
-%% nearest neighbour
-tic
-correct = 0;
-for i = m+1:size(imagestruct, 2)
-  best_match = get_best_match(imagestruct(i), imagestruct(1:m));
-  if close_enough(imagestruct(i), best_match)
-    correct = correct + 1;
-  end
-end
-
-accuracy = correct / (size(imagestruct, 2)-m);
-disp(accuracy)
-toc
 %% PCA - Alternative version with SVD
 
 [projection_matrix, principal_components, V] = pca_with_svd(training_set);
