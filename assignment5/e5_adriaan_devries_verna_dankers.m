@@ -46,19 +46,27 @@ for i = 1:9
   imshow(reshape(projection_matrix(i,:),[112 150]),[])
 end
 
-%% PCA with SVD
-
-
-[projection_matrix, principal_components, V] = pca_with_svd(training_set);
 %% PCA - Use the pca to reduce dimensions for all vectors
 
-imagestruct = [matrix.images{:}];
+imagestruct = [data.images{:}];
 positions = vertcat(imagestruct.position);
 
-for i = 1:size(reduced_images,2)
-  reduced_images(i).img = flatten_image(reduced_images(i).img);
-  reduced_images(i).img = projection_matrix * reduced_images(i).img;
+for i = 1:size(imagestruct,2)
+  imagestruct(i).img = flatten_image(imagestruct(i).img);
+  imagestruct(i).img = projection_matrix * imagestruct(i).img';
 end
+
+%% nearest neighbour
+
+correct = 0;
+for i = m+1:size(imagestruct, 2)
+  bestmatch = best_match(imagestruct(i), imagestruct(1:m));
+  if close_enough(imagestruct(i), bestmatch)
+    correct = correct + 1;
+  end
+end
+
+accuracy = correct / (size(imagestruct, 2)-m)
 
 %% PCA - Alternative version with SVD
 
