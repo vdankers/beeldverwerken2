@@ -2,65 +2,72 @@
 % Team: Adriaan de Vries (10795227), Verna Dankers (10761225)
 addpath('attachments');
 
-matrix = load(fullfile('','omni.mat'));
+data = load(fullfile('','omni.mat'));
+images = data.images;
 
-cor1 = calc_correlation(matrix.images{1}.img,matrix.images{2}.img)
-fake_cor1 = calc_fake_correlation(matrix.images{1}.img,matrix.images{2}.img)
-equal_fake = 2 - 2*cor1
+cor1 = calc_correlation(images{1}.img,images{2}.img)
+fake_cor1 = calc_fake_correlation(images{1}.img,images{2}.img)
+equal = 2 - 2*cor1
  
-cor2 = calc_correlation(matrix.images{45}.img,matrix.images{300}.img)
-fake_cor2 = calc_fake_correlation(matrix.images{45}.img,matrix.images{300}.img)
-equal_fake = 2 - 2*cor2
+cor2 = calc_correlation(images{45}.img,images{300}.img)
+fake_cor2 = calc_fake_correlation(images{45}.img,images{300}.img)
+equal = 2 - 2*cor2
 
-cor3 = calc_correlation(matrix.images{85}.img,matrix.images{6}.img)
-gitfake_cor3 = calc_fake_correlation(matrix.images{85}.img,matrix.images{6}.img)
-equal_fake = 2 - 2*cor3
+cor3 = calc_correlation(images{85}.img,images{6}.img)
+fake_cor3 = calc_fake_correlation(images{85}.img,images{6}.img)
+equal = 2 - 2*cor3
 
-%% PCA
+%% PCA - prepare data for PCA
 
 % Split training and test set
 n = 16800;
 m = 300;
-m2 = length(matrix.images)-m;
+m2 = length(images)-m;
 training_set = zeros(m,n);
 test_set = zeros(m2,n);
 
 for i = 1:m
-  training_set(i,:) = flatten_image(matrix.images{i}.img);
+  training_set(i,:) = flatten_image(images{i}.img);
 end
 
 for i = 1:m2
-  test_set(i,:) = flatten_image(matrix.images{i}.img);
+  test_set(i,:) = flatten_image(images{i}.img);
 end
 
-%% Own PCA method
+%% PCA - Calculate the principal components
+reduced_images = [images{:}];
+positions = vertcat(reduced_images.position);
 
-[P, E] = our_pca(training_set')
+[projection_data, principal_components, V] = our_pca2(training_set, 50);
 
-%% PCA2 for testing
-imagestruct = [matrix.images{:}];
-positions = vertcat(imagestruct.position);
 
-[projection_matrix, principal_components, V] = our_pca2(training_set, 50);
+%% PCA - Plot the first 9 PCA vectors as images
 
-% using the pca to reduce dimensions for all vectors
-for i = 1:size(imagestruct,2)
-  imagestruct(i).img = flatten_image(imagestruct(i).img);
-  imagestruct(i).img = projection_matrix * imagestruct(i).img';
+for i = 1:9
+  subplot(3,3,i)
+  imshow(reshape(projection_data(i,:),[112 150]),[])
 end
 
-%% PCA with SVD
-
-[projection_matrix, principal_components, V] = pca_with_svd(training_set);
+%% PCA - Use the pca to reduce dimensions for all vectors
 
 
+size(projection_data)
 
-%% Built in pca of matlab: (voor controle)
-[coeff,s] = pca(training_set');
-IM = s(:,1)
+for i = 1:size(reduced_images,2)
+  reduced_images(i).img = flatten_image(reduced_images(i).img);
+  reduced_images(i).img = projection_data * reduced_images(i).img;
+end
 
-subplot(2,1,1)
-imshow(reshape(IM,[112 150]),[]);
+%% PCA - Alternative version with SVD
 
-subplot(2,1,2)
-imshow(reshape(training_set(1,:),[112 150]),[]);
+[projection_data, principal_components, V] = pca_with_svd(training_set);
+
+%% PCA - Use built in pca of matlab (to control our own outcome)
+[coeff,principal_components] = pca(training_set');
+% IM = s(:,1)
+% 
+% subplot(2,1,1)
+% imshow(reshape(IM,[112 150]),[]);
+% 
+% subplot(2,1,2)
+% imshow(reshape(training_set(1,:),[112 150]),[]);

@@ -9,6 +9,7 @@ function [projection_matrix, PC, V] = our_pca2(data, d)
   C = (1 / (n-1)) * (data * data');
   [PC, V] = eigs(C, d);
   V = diag(V);
+  
   % Vectors and eigenvalues in decreasing order
   [~, indices] = sort(-1*V);
   PC = PC(:,indices);
